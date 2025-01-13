@@ -5,7 +5,7 @@ import av
 import cv2
 
 # YOLOv8 모델 로드
-model = YOLO("yolov8n.pt")
+model = YOLO("yolov8n.pt")  # YOLO 모델을 올바르게 로드
 
 st.title("YOLOv8 Object Detection")
 
@@ -16,15 +16,14 @@ def video_frame_callback(frame):
     results = model(img)
 
     # 감지된 객체에 대한 경계 상자와 레이블 그리기
-    if results:
-        for result in results:
-            boxes = result.boxes
-            for box in boxes:
-                x1, y1, x2, y2 = box.xyxy[0]
-                x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
-                cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                
-                # 클래스 이름과 신뢰도 표시
+    if results and hasattr(results, 'boxes'):
+        for box in results.boxes:  # results.boxes는 경계 상자 데이터
+            x1, y1, x2, y2 = box.xyxy[0]
+            x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+            cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+            
+            # 클래스 이름과 신뢰도 표시
+            if hasattr(box, 'cls') and hasattr(box, 'conf'):
                 cls = int(box.cls[0])
                 conf = float(box.conf[0])
                 label = f"{model.names[cls]} {conf:.2f}"
