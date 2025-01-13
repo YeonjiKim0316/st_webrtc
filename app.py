@@ -75,3 +75,14 @@ webrtc_streamer(
 )
 
 st.sidebar.write("WebRTC를 시작하려면 위의 카메라 권한을 허용하세요.")
+
+
+from ultralytics import solutions
+
+inf = solutions.Inference(
+    model="yolo11n.pt",  # You can use any model that Ultralytics support, i.e. YOLO11, YOLOv10
+)
+
+inf.inference()
+
+### Make sure to run the file using command `streamlit run <file-name.py>`
