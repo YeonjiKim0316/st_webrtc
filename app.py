@@ -1,4 +1,3 @@
-
 import streamlit as st
 from streamlit_webrtc import webrtc_streamer, WebRtcMode
 from ultralytics import YOLO
@@ -41,17 +40,19 @@ def video_frame_callback(frame):
 
 webrtc_streamer(
     key="yolov8-detection",
-    mode=WebRtcMode.SENDRECV,  # 양방향 모드 설정
+    mode=WebRtcMode.SENDRECV,
     video_frame_callback=video_frame_callback,
     rtc_configuration={
         "iceServers": [
             {"urls": ["stun:stun.l.google.com:19302"]},
             {"urls": ["stun:stun1.l.google.com:19302"]},
+            {"urls": ["stun:stun2.l.google.com:19302"]},
+            {"urls": ["stun:global.stun.twilio.com:3478?transport=udp"]}
         ]
     },
     media_stream_constraints={
         "video": True,
         "audio": False,
     },
-    async_processing=True,  # 비동기 작업 활성화
+    async_processing=True,
 )
